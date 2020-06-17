@@ -1,0 +1,20 @@
+type Song {
+    id: ID!
+    name: String!
+    singer: Artist
+    author: Artist
+    realease: String
+    path: String
+}
+
+type Artist {
+    id: ID!
+    name: String
+    Nation: String
+    Age: Int
+}
+
+type Query {
+    queryByID(id:ID!): Song
+    queryByName(name:name): [Song]
+}
