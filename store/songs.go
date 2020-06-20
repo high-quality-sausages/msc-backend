@@ -37,20 +37,20 @@ type Artist struct {
 }
 
 // GetSongByID : 通过ID查询
-func GetSongByID(id int) (*Song, error) {
+func GetSongByID(id int) ([]Song, error) {
 	artist := Artist{
 		ID:     "1",
 		Name:   "Adel",
 		Age:    45,
 		Nation: "US",
 	}
-	return &Song{
+	return []Song{Song{
 		ID:          "12",
 		Name:        "hello",
 		Singer:      artist,
 		Author:      artist,
 		ReleaseDate: "2020-01-02",
-	}, nil
+	}}, nil
 }
 
 func RequestSongsByName(name string) ([]Song, error) {
@@ -64,7 +64,7 @@ func RequestSongsByName(name string) ([]Song, error) {
 	}
 
 	reader := bytes.NewReader(bytesData)
-	request, err := http.NewRequest("POST", "localhost/api/name", reader)
+	request, err := http.NewRequest("POST", "http://localhost:8000/api/name", reader)
 
 	if err != nil {
 		fmt.Println("Failed to carete request")

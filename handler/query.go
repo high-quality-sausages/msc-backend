@@ -62,22 +62,30 @@ var QueryType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"queryByID": &graphql.Field{
-				Type: songType,
+			"songs": &graphql.Field{
+				Type: graphql.NewList(songType),
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Description: "Song ID",
-						Type:        graphql.NewNonNull(graphql.ID),
+						Type:        graphql.ID,
+					},
+					"name": &graphql.ArgumentConfig{
+						Description: "Song Name",
+						Type:        graphql.String,
+					},
+					"singer_name": &graphql.ArgumentConfig{
+						Description: "Singer Name",
+						Type:        graphql.String,
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					id, ok := p.Args["id"].(string)
-					idInt, err := strconv.Atoi(id)
-					if err != nil {
-						fmt.Println("Failed to parse string to int")
-					}
 
 					if ok {
+						idInt, err := strconv.Atoi(id)
+						if err != nil {
+							fmt.Println("Failed to parse string to int")
+						}
 						song, err := store.GetSongByID(idInt)
 						if err != nil {
 							return nil, err
@@ -85,19 +93,6 @@ var QueryType = graphql.NewObject(
 						return song, nil
 					}
 
-					err = errors.New("Missing required parameter 'id'")
-					return nil, err
-				},
-			},
-			"queryByName": &graphql.Field{
-				Type: graphql.NewList(songType),
-				Args: graphql.FieldConfigArgument{
-					"name": &graphql.ArgumentConfig{
-						Description: "Song Name",
-						Type:        graphql.String,
-					},
-				},
-				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					name, ok := p.Args["name"].(string)
 					if ok {
 						songs, err := store.GetSongsByName(name)
@@ -107,30 +102,16 @@ var QueryType = graphql.NewObject(
 						return songs, nil
 					}
 
-					err := errors.New("Missing required parameter 'name'")
-					return nil, err
-				},
-			},
-			"queryBySingerName": &graphql.Field{
-				Type: graphql.NewList(songType),
-				Args: graphql.FieldConfigArgument{
-					"singer_name": &graphql.ArgumentConfig{
-						Description: "Singer Name",
-						Type:        graphql.String,
-					},
-				},
-				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					singerName, ok := p.Args["singer_name"].(string)
 					if ok {
 						songs, err := store.GetSongsBySingerName(singerName)
 						if err != nil {
 							return nil, err
 						}
-
 						return songs, nil
 					}
 
-					err := errors.New("Missing required parameter 'singer_name'")
+					err := errors.New("Missing required parameter 'id'")
 					return nil, err
 				},
 			},
