@@ -17,4 +17,5 @@ type Artist {
 type Query {
     queryByID(id:ID!): Song
     queryByName(name:name): [Song]
+    queryBySingerName(name:name): [Song]
 }

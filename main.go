@@ -1,42 +1,27 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/graphql"
-	"github.com/high-quality-sausages/msc-backend/web"
+	handler "github.com/high-quality-sausages/msc-backend/handler"
+	"github.com/high-quality-sausages/msc-backend/util"
 )
-
-func handler(schema graphql.Schema) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		query, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		result := graphql.Do(graphql.Params{
-			Schema:        schema,
-			RequestString: string(query),
-		})
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(result)
-	}
-}
 
 func main() {
 
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query: web.QueryType,
+		Query: handler.QueryType,
 	})
 
 	if err != nil {
 		fmt.Println("error")
 	}
 
-	http.Handle("/graphql", handler(schema))
-	http.ListenAndServe("0.0.0.0:8080", nil)
+	router := gin.Default()
+	router.Use(util.Cors())
+
+	router.POST("/gql", handler.Register(schema))
+	router.Run(":8080")
 }
