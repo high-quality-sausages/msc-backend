@@ -23,5 +23,5 @@ func main() {
 	router.Use(util.Cors())
 
 	router.POST("/gql", handler.Register(schema))
-	router.Run(":8080")
+	router.Run("0.0.0.0:8080")
 }
