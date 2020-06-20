@@ -64,7 +64,7 @@ func RequestSongsByName(name string) ([]Song, error) {
 	}
 
 	reader := bytes.NewReader(bytesData)
-	request, err := http.NewRequest("POST", "http://120.55.41.64/api/name", reader)
+	request, err := http.NewRequest("POST", "localhost/api/name", reader)
 
 	if err != nil {
 		fmt.Println("Failed to carete request")
