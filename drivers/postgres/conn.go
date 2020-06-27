@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/BurntSushi/toml"
 	"github.com/high-quality-sausages/msc-backend/conf"
 	_ "github.com/lib/pq"
 )
@@ -13,13 +12,7 @@ import (
 var db *sql.DB
 
 func init() {
-	var config conf.Config
-	confPath := conf.GetConfPath()
-	fmt.Println(confPath)
-	if _, err := toml.DecodeFile(confPath, &config); err != nil {
-		fmt.Println(err)
-		return
-	}
+	var config = conf.GetConfig()
 
 	var pgInfo string
 

@@ -1,27 +1,25 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
-	"github.com/graphql-go/graphql"
-	handler "github.com/high-quality-sausages/msc-backend/handler"
+	handler "github.com/high-quality-sausages/msc-backend/handler/songs"
 	"github.com/high-quality-sausages/msc-backend/util"
 )
 
 func main() {
 
-	schema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query: handler.QueryType,
-	})
+	// schema, err := graphql.NewSchema(graphql.SchemaConfig{
+	// 	Query: handler.QueryType,
+	// })
 
-	if err != nil {
-		fmt.Println("error")
-	}
+	// if err != nil {
+	// 	fmt.Println("error")
+	// }
 
 	router := gin.Default()
 	router.Use(util.Cors())
 
-	router.POST("/gql", handler.Register(schema))
-	router.Run("0.0.0.0:8080")
+	// router.POST("/gql", handler.Register(schema))
+	router.GET("/songs/query", handler.QuerySongs)
+	router.Run(":8080")
 }

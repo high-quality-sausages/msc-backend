@@ -1,4 +1,4 @@
-package store
+package repository
 
 import (
 	"encoding/json"
@@ -6,12 +6,12 @@ import (
 )
 
 func TestGetSongByID(t *testing.T) {
-	resp, err := GetSongByID(10)
+	resp, err := GetSongByID("w001")
 	if err != nil {
 		t.Error(err)
 	}
 
-	t.Log(resp)
+	t.Log(resp[0].Name)
 }
 
 func TestGetSongsByName(t *testing.T) {
@@ -20,23 +20,15 @@ func TestGetSongsByName(t *testing.T) {
 		t.Error(err)
 	}
 
-	t.Log(resp[0].Name)
+	t.Log(resp)
 }
 
 func TestGetSongsBySingerName(t *testing.T) {
-	resp, err := GetSongsBySingerName("adel")
+	resp, err := GetSongsBySinger("adel")
 	if err != nil {
 		t.Error(err)
 	}
 	t.Log(resp[0].Name)
-}
-
-func TestRequestSongsByName(t *testing.T) {
-	resp, err := RequestSongsByName("hello")
-	if err != nil {
-		t.Error(err)
-	}
-	t.Log(resp[0].Singer)
 }
 
 func TestParse(t *testing.T) {
@@ -57,4 +49,14 @@ func TestParse(t *testing.T) {
 	}
 
 	t.Log(resp.Data[0])
+}
+
+func TestGetArtist(t *testing.T) {
+	artist, err := GetArtist("001")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(artist.ID)
+	// t.Log(artist.Name)
+	// t.Log(artist.Nation)
 }
